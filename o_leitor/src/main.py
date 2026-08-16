@@ -1,26 +1,39 @@
 import flet as ft
 
-
 def main(page: ft.Page):
-    counter = ft.Text("0", size=50, data=0)
+    # título da página
+    page.title = "O Leitor"
 
-    def increment_click(e: ft.Event[ft.FloatingActionButton]):
-        counter.data += 1
-        counter.value = str(counter.data)
+    # centralizando as coisas
+    page.vertical_alignment = ft.MainAxisAlignment.CENTER
+    page.horizontal_alignment = ft.MainAxisAlignment.CENTER
 
-    page.floating_action_button = ft.FloatingActionButton(
-        icon=ft.Icons.ADD, key="increment", on_click=increment_click
+    # boas-vindas simples
+    page.appbar = ft.AppBar(
+        title=ft.Text("Bem-vindo, leitor!")
     )
+
+    # texto gancho
+    text_intro = ft.Text(
+        "Selecione seu arquivo PDF:",
+        size=20
+    )
+
+    # botão para selecionar o arquivo
+    btn_add_file =ft.Button(
+        "Escolher PDF",
+        icon=ft.Icons.FOLDER_OPEN
+    )
+
+    # adicionandos os componentes na página
     page.add(
-        ft.SafeArea(
-            expand=True,
-            content=ft.Container(
-                content=counter,
-                alignment=ft.Alignment.CENTER,
-            ),
+        ft.Column(
+            controls=[text_intro, btn_add_file],
+
+            alignment=ft.MainAxisAlignment.CENTER, # Centraliza na vertical
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER
         )
     )
 
-
-if __name__ == "__main__":
-    ft.run(main)
+# faz o app rodar:
+ft.run(main)
