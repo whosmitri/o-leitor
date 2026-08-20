@@ -29,10 +29,6 @@ def main(page: ft.Page):
     # título da página
     page.title = "O Leitor"
 
-    # centralizando as coisas
-    page.vertical_alignment = ft.MainAxisAlignment.CENTER
-    page.horizontal_alignment = ft.MainAxisAlignment.CENTER
-
     # função para mudança de rotas/páginas
     def change_route(route):
         # importante para limpar a página antes de receber os novos componentes
@@ -67,6 +63,9 @@ def main(page: ft.Page):
                         # basicamente movi o ft.Column do final do código (page.add) para o ft.View
                         ft.Column(
                             controls=[text_intro, btn_add_file],
+
+                            expand=True,
+                            width=float("inf"),
                             
                             alignment=ft.MainAxisAlignment.CENTER, # Centraliza na vertical
                             horizontal_alignment=ft.CrossAxisAlignment.CENTER
