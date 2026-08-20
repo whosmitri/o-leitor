@@ -15,10 +15,13 @@ def main(page: ft.Page):
 
         # verifica se há arquivos selecionados
         if selected_files:
+            # pega o primeiro item da lista (no caso, o único arquivo selecionado)
             file_selected = selected_files[0]
-            # print(file_selected.path)
-            print(file_selected.name)
+            # guarda o nome do arquivo direto no objeto 'page' (estado)
+            page.selected_filename = file_selected.name
+            # muda a rota para /reader
             await page.push_route("/reader")
+
         # se não tem nada, apenas escreve no terminal que foi cancelado
         else:
             print("Canceled!!!")
@@ -75,7 +78,7 @@ def main(page: ft.Page):
         # se for a rota do leitor
         elif page.route=="/reader":
             page.views.append(
-                read_view(page, name_file="super_livro.pdf")
+                read_view(page, name_file=page.selected_filename)
             )
 
         # atualiza a página com os novos elementos
