@@ -1,6 +1,9 @@
 import flet as ft
 
 def read_view(page: ft.Page, name_file) -> ft.View:
+    async def go_back(e):
+        await page.push_route("/")
+
     # ft.View = tela completa
     return ft.View(
         # atualiza a rota para "/reader"
@@ -13,7 +16,7 @@ def read_view(page: ft.Page, name_file) -> ft.View:
                 leading=ft.IconButton(
                     icon=ft.Icons.ARROW_BACK,
                     # volta para o início
-                    on_click=lambda e: page.push_route("/")
+                    on_click=go_back
                 )
             ),
 
