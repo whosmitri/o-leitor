@@ -12,7 +12,7 @@ def read_view(page: ft.Page, name_file) -> ft.View:
         controls=[
             # AppBar
             ft.AppBar(
-                title=ft.Text(name_file),
+                title=ft.Text(name_file, size=18),
                 leading=ft.IconButton(
                     icon=ft.Icons.ARROW_BACK,
                     # volta para o início
@@ -24,7 +24,8 @@ def read_view(page: ft.Page, name_file) -> ft.View:
             # ft.Container embrulha o ft.Text, permitindo maior manipulação do espaço
             ft.Container(
                 content=ft.Text("Visualizar o PDF aqui", size=20),
-                alignment=ft.alignment.center
+                expand=True,
+                alignment=ft.Alignment(0, 0)
             )
         ]
     )
