@@ -17,6 +17,9 @@ def home_view(page: ft.Page):
             file_selected = selected_files[0]
             # guarda o nome do arquivo direto no objeto 'page' (estado)
             page.selected_filename = file_selected.name
+            # guarda o caminho do arquivo no objeto
+            page.selected_file_path = file_selected.path
+
             # muda a rota para /reader
             await page.push_route("/reader")
 
@@ -40,7 +43,7 @@ def home_view(page: ft.Page):
     return ft.View(
         # define a rota
         route = "/",
-        
+
         # adicionandos os componentes na página com ft.Views ao invés do page.add()
         controls=[
             ft.AppBar(

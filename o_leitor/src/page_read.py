@@ -1,6 +1,9 @@
 import flet as ft
+import pypdfium2 as pdfium
 
-def read_view(page: ft.Page, name_file) -> ft.View:
+def read_view(page: ft.Page, name_file, path_file) -> ft.View:
+    pdf = pdfium.PdfDocument(path_file)
+
     async def go_back(e):
         await page.push_route("/")
 
