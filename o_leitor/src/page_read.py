@@ -1,7 +1,42 @@
+import io
+import base64
+
 import flet as ft
 import pypdfium2 as pdfium
 
+def get_page_image(pdf_document, page_number):
+
+    # pega a primeira página
+    pdf_page = pdf_document[page_number]
+
+    # renderiza a imagem em alta resolução (scale=2)
+    image_page = pdf_page.render(scale=2).to_pil()
+
+    # precisa enviar a imagem pro flet
+    # guardar na memória RAM é mais leve do que salvar e deletar vários arquivos do disco
+    # 'io' cria os arquivos virtuais para salvar no buffer
+    # o flet só recebe texto
+    # base64 = transforma a imagem em uma string
+
+    # cria o buffer na memória RAM
+    buffer = io.BytesIO()
+
+    # salva a imagem no buffer
+    image_page.save(buffer, format="PNG")
+
+    # pega os bytes salvo no buffer
+    img_bytes = buffer.getvalue()
+
+    # transforma em texto utf-8 base64 para o flet
+    img_base64 = base64.b64encode(img_bytes).decode("utf-8")
+
+    # retorna o texto (imagem)
+    return img_base64
+
+
 def read_view(page: ft.Page, name_file, path_file) -> ft.View:
+
+    # abre o arquivo no pdfium
     pdf = pdfium.PdfDocument(path_file)
 
     async def go_back(e):
@@ -26,7 +61,7 @@ def read_view(page: ft.Page, name_file, path_file) -> ft.View:
             # conteúdo do página
             # ft.Container embrulha o ft.Text, permitindo maior manipulação do espaço
             ft.Container(
-                content=ft.Text("Visualizar o PDF aqui", size=20),
+                ft.Image(src=get_page_image(pdf_document=pdf, page_number=0), fit=ft.BoxFit.COVER),
                 expand=True,
                 alignment=ft.Alignment(0, 0)
             )
