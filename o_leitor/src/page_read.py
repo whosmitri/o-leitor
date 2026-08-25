@@ -39,8 +39,32 @@ def read_view(page: ft.Page, name_file, path_file) -> ft.View:
     # abre o arquivo no pdfium
     pdf = pdfium.PdfDocument(path_file)
 
+    # define o número da página atual (sempre começa em 0)
+    page.current_page_index = 0
+    # número total de páginas
+    total_pages = len(pdf)
+
+    # imagem da página atual do PDF
+    page_image = ft.Image(src=get_page_image(pdf_document=pdf, page_number=page.current_page_index), fit=ft.BoxFit.COVER)
+
+    # texto que mostra a página atual em relação ao documento inteiro
+    page_counter_text = ft.Text(f"{page.current_page_index + 1}/{total_pages}")
+
     async def go_back(e):
         await page.push_route("/")
+
+    def page_next(e):
+        # atualiza o índice da página
+        page.current_page_index += 1
+        
+        # aualiza a imagem
+        page_image.src = get_page_image(pdf_document=pdf, page_number=page.current_page_index)
+        
+        # atualiza o texto contador
+        page_counter_text.value = f"{page.current_page_index + 1}/{total_pages}"
+        
+        # redesenha/atualiza a tela no flet
+        page.update()
 
     # ft.View = tela completa
     return ft.View(
@@ -61,9 +85,29 @@ def read_view(page: ft.Page, name_file, path_file) -> ft.View:
             # conteúdo do página
             # ft.Container embrulha o ft.Text, permitindo maior manipulação do espaço
             ft.Container(
-                ft.Image(src=get_page_image(pdf_document=pdf, page_number=0), fit=ft.BoxFit.COVER),
+                page_image,
                 expand=True,
                 alignment=ft.Alignment(0, 0)
+            ),
+
+            ft.Row(
+                controls=[
+                    # botão de volat
+                    ft.IconButton(
+                        icon=ft.Icons.CHEVRON_LEFT
+                    ),
+
+                    # texto contador
+                    page_counter_text,
+
+                    # botão de avançar    
+                    ft.IconButton(
+                        icon=ft.Icons.CHEVRON_RIGHT,
+                        on_click=page_next
+                    )
+                ],
+
+                alignment=ft.MainAxisAlignment.CENTER                
             )
         ]
     )
