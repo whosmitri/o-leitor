@@ -53,6 +53,19 @@ def read_view(page: ft.Page, name_file, path_file) -> ft.View:
     async def go_back(e):
         await page.push_route("/")
 
+    def page_back(e):
+        # atualiza o índice da página
+            page.current_page_index -= 1
+            
+            # aualiza a imagem
+            page_image.src = get_page_image(pdf_document=pdf, page_number=page.current_page_index)
+            
+            # atualiza o texto contador
+            page_counter_text.value = f"{page.current_page_index + 1}/{total_pages}"
+            
+            # redesenha/atualiza a tela no flet
+            page.update()
+
     def page_next(e):
         # atualiza o índice da página
         page.current_page_index += 1
@@ -94,7 +107,8 @@ def read_view(page: ft.Page, name_file, path_file) -> ft.View:
                 controls=[
                     # botão de volat
                     ft.IconButton(
-                        icon=ft.Icons.CHEVRON_LEFT
+                        icon=ft.Icons.CHEVRON_LEFT,
+                        on_click=page_back
                     ),
 
                     # texto contador
