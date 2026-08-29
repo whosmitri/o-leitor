@@ -55,16 +55,16 @@ def read_view(page: ft.Page, name_file, path_file) -> ft.View:
 
     def page_back(e):
         # atualiza o índice da página
-            page.current_page_index -= 1
-            
-            # aualiza a imagem
-            page_image.src = get_page_image(pdf_document=pdf, page_number=page.current_page_index)
-            
-            # atualiza o texto contador
-            page_counter_text.value = f"{page.current_page_index + 1}/{total_pages}"
-            
-            # redesenha/atualiza a tela no flet
-            page.update()
+        page.current_page_index -= 1
+        
+        # aualiza a imagem
+        page_image.src = get_page_image(pdf_document=pdf, page_number=page.current_page_index)
+        
+        # atualiza o texto contador
+        page_counter_text.value = f"{page.current_page_index + 1}/{total_pages}"
+        
+        # redesenha/atualiza a tela no flet
+        page.update()
 
     def page_next(e):
         # atualiza o índice da página
