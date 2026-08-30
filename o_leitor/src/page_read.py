@@ -84,6 +84,9 @@ def read_view(page: ft.Page, name_file, path_file) -> ft.View:
         # redesenha/atualiza a tela no flet
         page.update()
 
+    def share_pdf(e):
+        page.share_files([path_file])
+
     # ft.View = tela completa
     return ft.View(
         # atualiza a rota para "/reader"
@@ -97,7 +100,13 @@ def read_view(page: ft.Page, name_file, path_file) -> ft.View:
                     icon=ft.Icons.ARROW_BACK,
                     # volta para o início
                     on_click=go_back
-                )
+                ),
+                actions=[
+                    ft.IconButton(
+                        ft.Icons.SHARE,
+                        on_click=share_pdf
+                    )
+                ]
             ),
 
             # conteúdo do página
