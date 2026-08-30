@@ -54,6 +54,8 @@ def read_view(page: ft.Page, name_file, path_file) -> ft.View:
         await page.push_route("/")
 
     def page_back(e):
+        if (page.current_page_index==0):
+            return
         # atualiza o índice da página
         page.current_page_index -= 1
         
@@ -67,6 +69,9 @@ def read_view(page: ft.Page, name_file, path_file) -> ft.View:
         page.update()
 
     def page_next(e):
+        if (page.current_page_index==(total_pages-1)):
+            return
+
         # atualiza o índice da página
         page.current_page_index += 1
         
