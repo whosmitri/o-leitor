@@ -37,7 +37,10 @@ def get_page_image(pdf_document, page_number):
 def read_view(page: ft.Page, name_file, bytes_file) -> ft.View:
 
     # abre o arquivo no pdfium
-    pdf = pdfium.PdfDocument(bytes_file)
+    try:
+        pdf = pdfium.PdfDocument(bytes_file)
+    except Exception as erro:
+        print(f"Erro ao abrir o PDF: {erro}")
 
     # define o número da página atual (sempre começa em 0)
     page.current_page_index = 0
