@@ -5,7 +5,7 @@ description = ""
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [
-    { name = "Flet developer", email = "you@example.com" }
+    { name = "whosmitri", email = "hellomitrii@gmail.com" }
 ]
 dependencies = [
     "flet>=0.86.5"
@@ -28,7 +28,7 @@ testpaths = ["tests"]
 [tool.flet]
 org = "com.mycompany"
 product = "o-leitor"
-company = "Flet"
+company = "Autrius"
 copyright = "Copyright (C) 2023-2026 by Flet"
 
 [tool.flet.app]
