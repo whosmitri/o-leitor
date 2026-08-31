@@ -50,6 +50,10 @@ def read_view(page: ft.Page, name_file, bytes_file) -> ft.View:
     # texto que mostra a página atual em relação ao documento inteiro
     page_counter_text = ft.Text(f"{page.current_page_index + 1}/{total_pages}")
 
+    # cria objeto Share
+    # é meio uma "ponte" entre o Flet e o SO
+    share = ft.Share()
+
     async def go_back(e):
         await page.push_route("/")
 
@@ -84,8 +88,20 @@ def read_view(page: ft.Page, name_file, bytes_file) -> ft.View:
         # redesenha/atualiza a tela no flet
         page.update()
 
-    def share_pdf(e):
-        page.share_files([bytes_file])
+    async def share_pdf(e):
+        # cria o objeto ShareFile, indicando o arquivo que deve ser compartilhado e seu nome
+        file = ft.ShareFile.from_bytes(data=bytes_file, name=name_file)
+
+        # chama a função de compartilhar arquivo
+        # Flet informa o SO que quer compartilhar o arquivo
+        # SO abre o menu nativo
+        # usuário escolhe opção ou cancela
+        # o resultado indicando qual app foi escolhido ou se foi cancelado volta para o Flet ('result')
+        # await espera o usuário escolher/clicar, sem travar a interface
+        result = await share.share_files(
+            [file],
+            text="Sharing a file from memory"
+        )
 
     # ft.View = tela completa
     return ft.View(
