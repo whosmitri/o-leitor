@@ -9,7 +9,11 @@ def home_view(page: ft.Page):
         # 2. esperar o usuário escolher
         # 3. coloque o resultados em file_selected
 
-        selected_files = await ft.FilePicker().pick_files(allow_multiple=False, allowed_extensions=["pdf"])
+        selected_files = await ft.FilePicker().pick_files(
+            allow_multiple=False, # seleciona apenas UM PDF
+            allowed_extensions=["pdf"], # selecionas apenas PDF
+            with_data=True # recebe bytes
+        )
 
         # verifica se há arquivos selecionados
         if selected_files:
@@ -17,8 +21,8 @@ def home_view(page: ft.Page):
             file_selected = selected_files[0]
             # guarda o nome do arquivo direto no objeto 'page' (estado)
             page.selected_filename = file_selected.name
-            # guarda o caminho do arquivo no objeto
-            page.selected_file_path = file_selected.path
+            # guarda os bytes do arquivo ao invés do path
+            page.selected_file_bytes = file_selected.bytes
 
             # muda a rota para /reader
             await page.push_route("/reader")

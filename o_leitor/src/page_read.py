@@ -34,10 +34,10 @@ def get_page_image(pdf_document, page_number):
     return img_base64
 
 
-def read_view(page: ft.Page, name_file, path_file) -> ft.View:
+def read_view(page: ft.Page, name_file, bytes_file) -> ft.View:
 
     # abre o arquivo no pdfium
-    pdf = pdfium.PdfDocument(path_file)
+    pdf = pdfium.PdfDocument(bytes_file)
 
     # define o número da página atual (sempre começa em 0)
     page.current_page_index = 0
@@ -85,7 +85,7 @@ def read_view(page: ft.Page, name_file, path_file) -> ft.View:
         page.update()
 
     def share_pdf(e):
-        page.share_files([path_file])
+        page.share_files([bytes_file])
 
     # ft.View = tela completa
     return ft.View(

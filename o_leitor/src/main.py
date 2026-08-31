@@ -22,7 +22,7 @@ def main(page: ft.Page):
         # se for a rota do leitor
         elif page.route=="/reader":
             page.views.append(
-                read_view(page, name_file=page.selected_filename, path_file=page.selected_file_path)
+                read_view(page, name_file=page.selected_filename, bytes_file=page.selected_file_bytes)
             )
 
         # atualiza a página com os novos elementos
