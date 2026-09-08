@@ -22,6 +22,9 @@ dev = [
     "flet[test]>=0.86.5",
 ]
 
+[tool.flet.android]
+target_arch = ["arm64-v8a", "armeabi-v7a"]
+
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
