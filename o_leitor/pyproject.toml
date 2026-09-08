@@ -8,7 +8,8 @@ authors = [
     { name = "whosmitri", email = "hellomitrii@gmail.com" }
 ]
 dependencies = [
-    "flet>=0.86.5"
+    "flet>=0.86.5",
+    "pypdfium2>=5.13.0"
 ]
 
 [dependency-groups]
