@@ -1,8 +1,10 @@
 import io
 import base64
+import ctypes
+import os
+from pathlib import Path
 
 import flet as ft
-import pypdfium2 as pdfium
 
 def get_page_image(pdf_document, page_number):
 
@@ -35,6 +37,67 @@ def get_page_image(pdf_document, page_number):
 
 
 def read_view(page: ft.Page, name_file, bytes_file) -> ft.View:
+
+    # lê a variável de ambiente para guardar o caminho da pasta onde as bibliotecas nativas estão guardadas
+    native_library_dir = os.environ.get("ANDROID_NATIVE_LIBRARY_DIR")
+    # cópias de segurança
+    # da ferramenta para acessar os arquivos .so/.dll e usar as funções nativas
+    original_cdll = ctypes.CDLL
+    # da função que checa se um caminho existe
+    original_path_exists = Path.exists
+    # importante para restaurar tudo de volta ao original
+
+    def load_android_library(name, *args, **kwargs):
+        # verifica se o programa está procurando por "libpdfium.so"
+        # os.path.basename(os.fspath(name)) = pega apenas o nome do arquivo ("libpdfium.so")
+        if native_library_dir and os.path.basename(os.fspath(name)) == "libpdfium.so":
+            # transforma o caminho do arquivo em algo completo com o "ANDROID_NATIVE_LIBRARY_DIR" e o nome da dependência ("libpdfium.so")
+            # name = ANDROID_NATIVE_LIBRARY_DIR/libpdfium.so
+            name = os.path.join(native_library_dir, "libpdfium.so")
+        # devolve a biblioteca original para o CDLL original fazer todos os processamentos
+        # se a condição for verdadeira, então com o caminho (name) atualizado
+        return original_cdll(name, *args, **kwargs)
+
+    # função substituta de 'Path.exists'
+    def library_exists(path):
+        # verifica se o programa está procurando por "libpdfium.so"
+        # os.path.basename(os.fspath(name)) = pega apenas o nome do arquivo ("libpdfium.so")
+        if native_library_dir and os.path.basename(os.fspath(path)) == "libpdfium.so":
+            # retorna True direto para dizer que o arquivo existe SIM
+            return True
+        # se o arquivo procurado for outro, usa a cópia de segurança criada anteriormente
+        return original_path_exists(path)
+
+    try:
+        # condicional para fazer desvio
+        # funciona no Android, mas é ignorado no computador
+        if native_library_dir:
+            # troca as ferramentas oficiais pelas criadas como desvio
+            ctypes.CDLL = load_android_library
+            Path.exists = library_exists
+        # importa a biblioteca
+        import pypdfium2 as pdfium
+    # se der erro ao importar:
+    except ImportError as error:
+        return ft.View(
+            route="/reader",
+            controls=[
+                ft.AppBar(title=ft.Text(name_file)),
+                ft.Container(
+                    content=ft.Text(
+                        "Nao foi possivel carregar o leitor de PDF. "
+                        f"Detalhes: {error}",
+                        selectable=True,
+                    ),
+                    padding=20,
+                ),
+            ],
+        )
+    # "finally" é sempre executado no final
+    finally:
+        # devolve as ferramentas oficiais
+        ctypes.CDLL = original_cdll
+        Path.exists = original_path_exists
 
     # abre o arquivo no pdfium
     try:

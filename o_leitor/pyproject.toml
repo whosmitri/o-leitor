@@ -9,7 +9,8 @@ authors = [
 ]
 dependencies = [
     "flet>=0.86.5",
-    "pypdfium2>=5.13.0"
+    "pypdfium2>=5.13.0",
+    "Pillow>=11.0.0"
 ]
 
 [dependency-groups]
@@ -24,6 +25,7 @@ dev = [
 
 [tool.flet.android]
 target_arch = ["arm64-v8a", "armeabi-v7a"]
+extract_packages = ["pypdfium2", "pypdfium2_raw"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
