@@ -12,3 +12,10 @@ um app que lê PDFs
 * Python
 * Flet
 * pypdfium2
+
+## Criar o APK
+No momento só funciona com o argumento `--android-legacy-packaging` no comando `build`:
+
+```bash
+flet build apk --android-legacy-packaging -v"
+```
