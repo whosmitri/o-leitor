@@ -1,33 +1,22 @@
 import io
 import base64
-import ctypes
-import os
-from pathlib import Path
+import pymupdf as mpdf
 
 import flet as ft
 
 def get_page_image(pdf_document, page_number):
 
-    # pega a primeira página
-    pdf_page = pdf_document[page_number]
+    # pega a página pelo seu número
+    pdf_page = pdf_document.load_page(page_number)
 
-    # renderiza a imagem em alta resolução (scale=2)
-    image_page = pdf_page.render(scale=2).to_pil()
+    # matriz para multiplicar a escala padrão por 2 (aumenta a resolução)
+    matrix = mpdf.Matrix(2, 2)
 
-    # precisa enviar a imagem pro flet
-    # guardar na memória RAM é mais leve do que salvar e deletar vários arquivos do disco
-    # 'io' cria os arquivos virtuais para salvar no buffer
-    # o flet só recebe texto
-    # base64 = transforma a imagem em uma string
+    # pixmap para gerar imagem (aplicando a matrix)
+    pmap = pdf_page.get_pixmap(matrix=matrix)
 
-    # cria o buffer na memória RAM
-    buffer = io.BytesIO()
-
-    # salva a imagem no buffer
-    image_page.save(buffer, format="PNG")
-
-    # pega os bytes salvo no buffer
-    img_bytes = buffer.getvalue()
+    # pega os bytes da imagem PNG gerada pelo pixmap
+    img_bytes = pmap.tobytes("png")
 
     # transforma em texto utf-8 base64 para o flet
     img_base64 = base64.b64encode(img_bytes).decode("utf-8")
@@ -37,71 +26,11 @@ def get_page_image(pdf_document, page_number):
 
 
 def read_view(page: ft.Page, name_file, bytes_file) -> ft.View:
-
-    # lê a variável de ambiente para guardar o caminho da pasta onde as bibliotecas nativas estão guardadas
-    native_library_dir = os.environ.get("ANDROID_NATIVE_LIBRARY_DIR")
-    # cópias de segurança
-    # da ferramenta para acessar os arquivos .so/.dll e usar as funções nativas
-    original_cdll = ctypes.CDLL
-    # da função que checa se um caminho existe
-    original_path_exists = Path.exists
-    # importante para restaurar tudo de volta ao original
-
-    def load_android_library(name, *args, **kwargs):
-        # verifica se o programa está procurando por "libpdfium.so"
-        # os.path.basename(os.fspath(name)) = pega apenas o nome do arquivo ("libpdfium.so")
-        if native_library_dir and os.path.basename(os.fspath(name)) == "libpdfium.so":
-            # transforma o caminho do arquivo em algo completo com o "ANDROID_NATIVE_LIBRARY_DIR" e o nome da dependência ("libpdfium.so")
-            # name = ANDROID_NATIVE_LIBRARY_DIR/libpdfium.so
-            name = os.path.join(native_library_dir, "libpdfium.so")
-        # devolve a biblioteca original para o CDLL original fazer todos os processamentos
-        # se a condição for verdadeira, então com o caminho (name) atualizado
-        return original_cdll(name, *args, **kwargs)
-
-    # função substituta de 'Path.exists'
-    def library_exists(path):
-        # verifica se o programa está procurando por "libpdfium.so"
-        # os.path.basename(os.fspath(name)) = pega apenas o nome do arquivo ("libpdfium.so")
-        if native_library_dir and os.path.basename(os.fspath(path)) == "libpdfium.so":
-            # retorna True direto para dizer que o arquivo existe SIM
-            return True
-        # se o arquivo procurado for outro, usa a cópia de segurança criada anteriormente
-        return original_path_exists(path)
-
+    # abre o arquivo no pymupdf
     try:
-        # condicional para fazer desvio
-        # funciona no Android, mas é ignorado no computador
-        if native_library_dir:
-            # troca as ferramentas oficiais pelas criadas como desvio
-            ctypes.CDLL = load_android_library
-            Path.exists = library_exists
-        # importa a biblioteca
-        import pypdfium2 as pdfium
-    # se der erro ao importar:
-    except ImportError as error:
-        return ft.View(
-            route="/reader",
-            controls=[
-                ft.AppBar(title=ft.Text(name_file)),
-                ft.Container(
-                    content=ft.Text(
-                        "Nao foi possivel carregar o leitor de PDF. "
-                        f"Detalhes: {error}",
-                        selectable=True,
-                    ),
-                    padding=20,
-                ),
-            ],
-        )
-    # "finally" é sempre executado no final
-    finally:
-        # devolve as ferramentas oficiais
-        ctypes.CDLL = original_cdll
-        Path.exists = original_path_exists
-
-    # abre o arquivo no pdfium
-    try:
-        pdf = pdfium.PdfDocument(bytes_file)
+        # fitz.open() = abre tanto caminho/path quanto bytes
+        # recebe parâmetro "stream" para saber que se tratam de bytes puros
+        pdf = mpdf.open(stream=bytes_file, filetype="pdf")
     except Exception as erro:
         print(f"Erro ao abrir o PDF: {erro}")
 
