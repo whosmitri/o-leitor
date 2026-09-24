@@ -14,8 +14,10 @@ um app que lê PDFs
 * pypdfium2
 
 ## Criar o APK
+Para rodar o comando `build`, é necessário estar dentro do diretório `o_leitor`.
+
 No momento só funciona com o argumento `--android-legacy-packaging` no comando `build`:
 
 ```bash
-flet build apk --android-legacy-packaging -v"
+flet build apk --android-legacy-packaging -v
 ```
