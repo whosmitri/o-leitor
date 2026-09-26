@@ -25,3 +25,7 @@ Para instalar no celular Android com `adb` e pelo Windows:
 ```bash
 adb install '.\build\apk\O Leitor.apk'
 ```
+
+## Licença & Créditos
+
+Este projeto é licenciado sob a GNU AGPL v3. Utiliza a biblioteca PyMuPDF para renderização de documentos PDF.
