@@ -1,0 +1,28 @@
+name: Build APK
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      
+      - name: Setup Python
+        uses: actions/setup-python@v7.0.0
+        with:
+          python-version: 3.13
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v6.0.1
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Setup Android SDK Tools
+        uses: android-actions/setup-android@v3.2.1
+        # with:
+          # cmdline-tools-version: 14742923
+          
