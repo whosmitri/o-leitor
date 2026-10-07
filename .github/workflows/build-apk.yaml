@@ -33,6 +33,12 @@ jobs:
           # Should accepted licenses be logged. If not, accepted licences will be acce  pted silently
           log-accepted-android-sdk-licenses: true
           packages: 'platform-tools cmdline-tools;latest build-tools;34.0.0'
+
+      - name: Flutter action
+        uses: subosito/flutter-action@v2.14.0
+        with:
+          flutter-version: '3.44.8'
+          channel: 'stable'
       
       - name: Install Dependencies
         run: |
