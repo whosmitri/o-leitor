@@ -9,6 +9,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v7
       
       - name: Setup Python
         uses: actions/setup-python@v7.0.0
@@ -28,8 +30,9 @@ jobs:
           # cmdline-tools-version. See https://developer.android.com/studio#command-line-tools-only
           # Android SDK is usable only after the license agreement. Should setup-android agree to the licences, provided by "sdkmanager --licenses"
           accept-android-sdk-licenses: true
-          # Should accepted licenses be logged. If not, accepted licences will be accepted silently
+          # Should accepted licenses be logged. If not, accepted licences will be acce  pted silently
           log-accepted-android-sdk-licenses: true
+          packages: 'platform-tools cmdline-tools;latest build-tools;latest'
       
       - name: Install Dependencies
         run: |
@@ -44,5 +47,5 @@ jobs:
         with:
           name: o-leitor-apk
           path: o_leitor/build/apk/*.apk
-          if_no_files_found: error
+          if-no-files-found: error
           
