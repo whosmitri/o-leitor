@@ -23,6 +23,26 @@ jobs:
 
       - name: Setup Android SDK Tools
         uses: android-actions/setup-android@v3.2.1
-        # with:
+        with:
           # cmdline-tools-version: 14742923
+          # cmdline-tools-version. See https://developer.android.com/studio#command-line-tools-only
+          # Android SDK is usable only after the license agreement. Should setup-android agree to the licences, provided by "sdkmanager --licenses"
+          accept-android-sdk-licenses: true
+          # Should accepted licenses be logged. If not, accepted licences will be accepted silently
+          log-accepted-android-sdk-licenses: true
+      
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip || python3 -m pip install --upgrade pip
+          pip install flet pymupdf
+
+      - name: Build Flet APK
+        run: flet build apk o_leitor/ -v
+      
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: o-leitor-apk
+          path: o_leitor/build/apk/*.apk
+          if_no_files_found: error
           
