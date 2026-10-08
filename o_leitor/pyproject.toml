@@ -1,5 +1,5 @@
 [project]
-name = "O Leitor"
+name = "o_leitor"
 version = "0.1.0"
 description = ""
 readme = "README.md"
@@ -31,7 +31,7 @@ testpaths = ["tests"]
 
 [tool.flet]
 org = "com.mycompany"
-product = "o-leitor"
+product = " O Leitor"
 company = "Autrius"
 copyright = "Copyright (C) 2023-2026 by Flet"
 
