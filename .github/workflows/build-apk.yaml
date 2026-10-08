@@ -44,9 +44,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip || python3 -m pip install --upgrade pip
           pip install flet pymupdf
+          
+      - name: Fix JNI dependency
+        run: |
+          flutter pub add jni:^1.1.0
+          flutter pub get
 
       - name: Build Flet APK
-        run: flet build apk o_leitor/ -v --force-build-cache
+        run: flet build apk o_leitor/ -v
       
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v7.0.2
