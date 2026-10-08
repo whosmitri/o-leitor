@@ -11,6 +11,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+
+      - name: Setup Android SDK Tools
+        uses: android-actions/setup-android@v3.2.1
+        with:
+          # cmdline-tools-version: 14742923
+          # cmdline-tools-version. See https://developer.android.com/studio#command-line-tools-only
+          # Android SDK is usable only after the license agreement. Should setup-android agree to the licences, provided by "sdkmanager --licenses"
+          accept-android-sdk-licenses: true
+          # Should accepted licenses be logged. If not, accepted licences will be acce  pted silently
+          log-accepted-android-sdk-licenses: true
+          packages: 'platform-tools cmdline-tools;latest build-tools;34.0.0'
       
       - name: Build Flet App
         id: build-flet-apk
