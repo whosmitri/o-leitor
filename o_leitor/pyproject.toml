@@ -38,3 +38,6 @@ copyright = "Copyright (C) 2023-2026 by Flet"
 [tool.flet.app]
 path = "src"
 name = "OLeitor"
+
+[tool.flet.flutter.pubspec.dependency_overrides]
+jni = "^1.1.0"
