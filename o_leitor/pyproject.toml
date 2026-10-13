@@ -41,3 +41,15 @@ name = "OLeitor"
 
 [tool.flet.flutter.pubspec.dependency_overrides]
 jni = "^1.1.0"
+
+[tool.flet.splash]
+color = "#FFFFFF"
+dark_color = "#463F3A"
+
+splash_android = "icons/splash.png"
+splash_android_dark = "icons/splash_dark.png"
+splash_web = "icons/splash.png"
+splash_web_dark = "icons/splash_dark.png"
+
+[tool.flet.assets]
+include = ["**/*"]
