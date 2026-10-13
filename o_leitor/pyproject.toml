@@ -34,6 +34,7 @@ org = "com.mycompany"
 product = " O Leitor"
 company = "Autrius"
 copyright = "Copyright (C) 2023-2026 by Flet"
+icon_path = "icons/app_icon.png"
 
 [tool.flet.app]
 path = "src"
