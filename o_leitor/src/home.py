@@ -48,12 +48,12 @@ def home_view(page: ft.Page):
         # define a rota
         route = "/",
 
+        appbar=ft.AppBar(
+            title=ft.Text("Bem-vindo, leitor!")
+        ),
+
         # adicionandos os componentes na página com ft.Views ao invés do page.add()
         controls=[
-            ft.AppBar(
-                title=ft.Text("Bem-vindo, leitor!")
-            ),
-
             # basicamente movi o ft.Column do final do código (page.add) para o ft.View
             ft.Column(
                 controls=[text_intro, btn_add_file],

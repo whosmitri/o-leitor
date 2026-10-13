@@ -47,7 +47,12 @@ def main(page: ft.Page):
         ),
 
         appbar_theme=ft.AppBarTheme(
-            shape=ft.RoundedRectangleBorder(radius=12),
+            shape=ft.RoundedRectangleBorder(
+                radius=ft.BorderRadius.only(
+                    bottom_left=20, 
+                    bottom_right=20
+                )
+            ),
         ),
     )
 
@@ -67,7 +72,12 @@ def main(page: ft.Page):
         ),
 
         appbar_theme=ft.AppBarTheme(
-            shape=ft.RoundedRectangleBorder(radius=12),
+            shape=ft.RoundedRectangleBorder(
+                radius=ft.BorderRadius.only(
+                    bottom_left=20, 
+                    bottom_right=20
+                )
+            ),
         ),
     )
 
