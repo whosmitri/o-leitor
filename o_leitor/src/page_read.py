@@ -1,4 +1,3 @@
-import io
 import base64
 import pymupdf as mpdf
 
