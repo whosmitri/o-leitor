@@ -34,7 +34,7 @@ org = "com.mycompany"
 product = " O Leitor"
 company = "Autrius"
 copyright = "Copyright (C) 2023-2026 by Flet"
-icon_path = "icons/icon.png"
+icon_path = "assets/icons/icon.png"
 
 [tool.flet.app]
 path = "src"
@@ -46,11 +46,6 @@ jni = "^1.1.0"
 [tool.flet.splash]
 color = "#FFFFFF"
 dark_color = "#463F3A"
-
-splash_android = "icons/splash.png"
-splash_android_dark = "icons/splash_dark.png"
-splash_web = "icons/splash.png"
-splash_web_dark = "icons/splash_dark.png"
 
 [tool.flet.assets]
 include = ["**/*"]
