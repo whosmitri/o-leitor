@@ -1,27 +1,22 @@
-import base64
 import pymupdf as mpdf
 
 import flet as ft
 
-def get_page_image(pdf_document, page_number):
+# escala para renderizar a imagem png do pdf
+RENDER_SCALE = 1.25
 
+def get_page_image(pdf_document: mpdf.Document, page_number: int) -> bytes:
     # pega a página pelo seu número
     pdf_page = pdf_document.load_page(page_number)
 
-    # matriz para multiplicar a escala padrão por 2 (aumenta a resolução)
-    matrix = mpdf.Matrix(2, 2)
-
     # pixmap para gerar imagem (aplicando a matrix)
-    pmap = pdf_page.get_pixmap(matrix=matrix)
+    pmap = pdf_page.get_pixmap(
+        matrix=mpdf.Matrix(RENDER_SCALE, RENDER_SCALE),
+        alpha=False,
+    )
 
     # pega os bytes da imagem PNG gerada pelo pixmap
-    img_bytes = pmap.tobytes("png")
-
-    # transforma em texto utf-8 base64 para o flet
-    img_base64 = base64.b64encode(img_bytes).decode("utf-8")
-
-    # retorna o texto (imagem)
-    return img_base64
+    return pmap.tobytes("png")
 
 
 def read_view(page: ft.Page, name_file, bytes_file) -> ft.View:
@@ -39,7 +34,10 @@ def read_view(page: ft.Page, name_file, bytes_file) -> ft.View:
     total_pages = len(pdf)
 
     # imagem da página atual do PDF
-    page_image = ft.Image(src=get_page_image(pdf_document=pdf, page_number=page.current_page_index), fit=ft.BoxFit.COVER)
+    page_image = ft.Image(
+        src=get_page_image(pdf_document=pdf, page_number=page.current_page_index),
+        fit=ft.BoxFit.CONTAIN,
+    )
 
     # texto que mostra a página atual em relação ao documento inteiro
     page_counter_text = ft.Text(f"{page.current_page_index + 1}/{total_pages}")
